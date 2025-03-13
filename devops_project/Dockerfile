@@ -24,5 +24,6 @@ RUN python3 -m venv myenv && /bin/bash -c "source myenv/bin/activate && pip inst
 EXPOSE 7000
 
 
-CMD source myenv/bin/activate && python3 manage.py runserver 0.0.0.0:7000
+CMD source myenv/bin/activate && \
+python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:7000
 
