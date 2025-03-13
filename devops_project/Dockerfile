@@ -1,29 +1,28 @@
-FROM ubuntu:latest
+#FROM ubuntu:latest
 
-# Set non-interactive mode
+# Use an official Python runtime as a parent image
+FROM python:3.12-slim
+
+# Set environment variables to prevent interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
-
-
-#update and install dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv bash
 
 #set a working directory
 WORKDIR /app
 
+# Copy application files
 COPY requirements.txt /app/
 COPY my_django_app /app/
 
 
-# Create virtual environment and install dependencies
+#update and install dependencies
 # /bin/sh does not support source, but bash does.
 # Explicitly using /bin/bash -c ensures the activation command runs properly.
 
-RUN python3 -m venv myenv && /bin/bash -c "source myenv/bin/activate && pip install --no-cache-dir -r requirements.txt"
+RUN apt-get update && apt-get install -y bash && \
+    python3 -m venv myenv1 && \
+    /bin/bash -c "source myenv1/bin/activate && pip install --no-cache-dir -r requirements.txt"
 
-
+# Expose the application port
 EXPOSE 7000
 
-
-CMD source myenv/bin/activate && \
-python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:7000
-
+CMD ["/bin/bash/" , "-c" , "source myenv1/bin/activate && python manage.py runserver 0.0.0.0:7000"]
