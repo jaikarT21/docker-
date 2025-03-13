@@ -25,4 +25,4 @@ RUN apt-get update && apt-get install -y bash && \
 # Expose the application port
 EXPOSE 7000
 
-CMD ["/bin/bash/" , "-c" , "source myenv1/bin/activate && python manage.py runserver 0.0.0.0:7000"]
+CMD ["/bin/bash" , "-c" , "source myenv1/bin/activate && python manage.py runserver 0.0.0.0:7000"]
