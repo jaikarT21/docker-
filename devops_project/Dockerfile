@@ -1,15 +1,24 @@
-FROM ubuntu
+FROM ubuntu:latest
 
+# Set non-interactive mode
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+#update and install dependencies
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv bash
+
+#set a working directory
 WORKDIR /app
 
 COPY requirements.txt /app/
 COPY my_django_app /app/
 
 
-RUN apt-get update && apt-get install python3 python3-pip python3-venv
+# Create virtual environment and install dependencies
+# /bin/sh does not support source, but bash does.
+# Explicitly using /bin/bash -c ensures the activation command runs properly.
 
-
-RUN source myenv/bin/activate && pip install --no--cache-dir -r requirements.txt
+RUN python3 -m venv myenv && /bin/bash -c "source myenv/bin/activate && pip install --no-cache-dir -r requirements.txt"
 
 
 EXPOSE 7000
